@@ -1,73 +1,35 @@
 import React, { Component } from 'react';
-import axios from '../../axios';
-
-import Post from '../../components/Post/Post';
-import FullPost from '../../components/FullPost/FullPost';
-import NewPost from '../../components/NewPost/NewPost';
+import Posts from './Posts/Posts';
 import './Blog.css';
+import {Route} from 'react-router-dom';
+import NewPost from './NewPost/NewPost';
+
 
 
 class Blog extends Component {
 
-    state = {
-        posts : [],
-        selectedPostId: null,
-        error : false
-    }
-    componentDidMount() {
-        axios.get('/posts')
-        .then (res => {
-            const posts = res.data.slice(0, 4);
-            const updatedPosts = posts.map(post => {
-                return {
-                    ...post,
-                    author :'husam'
-
-                }
-                
-            })
-            this.setState({posts:updatedPosts});
-            // console.log (res);
-        })
-        .catch(error =>{
-            this.setState({error:true});
-        });
-        
-    }
-
-    postSelectedHandler = (id) => {
-        this.setState({selectedPostId:id});
-
-    }
-
-    render () {
-        let posts  = <p style = {{textAlign : 'center'}}>hatalar var</p>;
-         
-        if (!this.state.error){
-            posts = this.state.posts.map(post => {
-                return  <Post 
-                key = {post.id} 
-                title ={post.title}
-                author = {post.author}
-                clicked = {() => this.postSelectedHandler(post.id)}
-                 />;
-          })
-            
-        }
-
-        
+    render () {   
 
         return (
-            <div>
-                <section className="Posts">
-                 {posts}
-                </section>
-                <section>
+            <div className="Blog">
+                <header>
+                    <nav>
+                        <ul>
+                            <li><a href="/">Ana Sayfa</a></li>
+                            <li><a href="/new-post">Yeni Yazı</a></li>
+                        </ul>
+                    </nav>
+                </header>
+                {/*<Route path="/" exact render= {()=><h1>Ana Sayfa</h1>}/>    */}
+                <Route path="/" exact component ={Posts} />         
+                <Route path="/new-post" exact component ={NewPost} />                  
+         
+                {/* <section>
                     <FullPost id = {this.state.selectedPostId} />
                 </section>
                 <section>
                     <NewPost />
-                </section>
+                </section> */}
             </div>
         );
     }
